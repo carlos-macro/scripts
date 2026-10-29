@@ -19,7 +19,7 @@ Os scripts podem ser em linguagens diferentes, por isso cada um fica isolado em 
 
 | Script | Linguagem | O que faz |
 | --- | --- | --- |
-| [sincronizar-nomes-projetos](scripts/sincronizar-nomes-projetos/) | Go | Copia os nomes dos projetos do Zoho CRM para o `ProjectName` do ApiManager. |
+| [sincronizar-nomes-projetos](scripts/sincronizar-nomes-projetos/) | Go | Grava no `ProjectName` das configurações do ApiManager o nome do projeto no Zoho CRM (com sufixo, quando houver). |
 
 ## Uso
 
