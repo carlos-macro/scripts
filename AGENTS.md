@@ -15,6 +15,11 @@ Responda sempre em **português do Brasil**.
 - Não coloque segredos (tokens, senhas, credenciais) nos scripts; leia-os de variáveis de ambiente ou arquivos fora do versionamento.
 - Scripts que escrevem em sistemas reais (Zoho CRM, bancos, APIs de produção) só são executados com autorização explícita.
 
+## Escopo de leitura
+
+- Trabalhe só com o que está neste repositório e com o que o desenvolvedor trouxer na conversa. Não abra, liste nem busque em pastas fora dele (como `../ApiManager` ou `../zoho-functions`) sem pedido claro.
+- Se faltar informação de outro sistema (formato de API, campos, regras de negócio), pergunte ao desenvolvedor ou peça um exemplo, em vez de procurar fora do repositório.
+
 ## Git
 
 - `commit`, `push` e demais ações listadas em `../AGENTS.md` exigem autorização explícita no momento.

@@ -1,0 +1,152 @@
+{
+  "projetos": [
+    {
+      "projectId": "4918426001337478951",
+      "body": { "enable": true, "minutes": 3, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000326286577",
+      "body": { "enable": true, "minutes": 10, "ignoreChatbot": false, "chatbotMinutes": 20, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000427538811",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": true, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000427538816",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": true, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "6878169000000603013",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": true, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000482774772",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000267988603",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000326286596",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000267988585",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000465323046",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000639525342",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000248642295",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000013498007",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426001242151461",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426001245877442",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000047567003-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000054386272-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000063651364-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000427538816-IA",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000427538811-IA",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426001639791291",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000047567003",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426001669439246",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426001669467311",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426001544238700",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426002174313939",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426002284882870",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426002476447776-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000248642295-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000326286596-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426002278650606-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426002278650606",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426002085120409-VOZ",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426002574879716",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000925843195",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000054386272",
+      "body": { "enable": true, "minutes": 20, "ignoreChatbot": false, "chatbotMinutes": null, "maxHours": 24 }
+    },
+    {
+      "projectId": "4918426000105088330",
+      "body": { "enable": true, "minutes": 30, "ignoreChatbot": true, "chatbotMinutes": null, "maxHours": 24 }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # PRD 002 — Configurar abandono dos projetos no ApiManager
 
-**Status:** proposta · **Script:** [scripts/configurar-abandono-projetos](../scripts/configurar-abandono-projetos/)
+**Status:** implementado · **Script:** [scripts/configurar-abandono-projetos](../scripts/configurar-abandono-projetos/)
 
 ## Problema
 

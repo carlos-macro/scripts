@@ -19,6 +19,7 @@ Os scripts podem ser em linguagens diferentes, por isso cada um fica isolado em 
 
 | Script | Linguagem | O que faz |
 | --- | --- | --- |
+| [configurar-abandono-projetos](scripts/configurar-abandono-projetos/) | Go | Grava a configuração de abandono (`/recovery`) do ApiManager nos projetos listados em JSON que existem no ApiManager. |
 | [sincronizar-nomes-projetos](scripts/sincronizar-nomes-projetos/) | Go | Grava no `ProjectName` das configurações do ApiManager o nome do projeto no Zoho CRM (com sufixo, quando houver). |
 
 ## Uso
