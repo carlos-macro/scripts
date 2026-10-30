@@ -1,6 +1,6 @@
 # PRD 002 — Configurar abandono dos projetos no ApiManager
 
-**Status:** implementado · **Script:** [scripts/configurar-abandono-projetos](../scripts/configurar-abandono-projetos/)
+**Status:** revisão 2 implementada (novo formato da listagem) · **Script:** [scripts/configurar-abandono-projetos](../scripts/configurar-abandono-projetos/)
 
 ## Problema
 
@@ -44,11 +44,22 @@ access-token: <APIMANAGER_ACCESS_TOKEN>
 {
   "items": [
     {
-      "projectId": "4918426000013498007",
+      "projectId": "4918426000047567003",
+      "projectName": "Vivo",
+      "modules": ["TelecomModule", "TelecomPipeline"],
+      "updateByTimeEnabled": false,
+      "intergrallEnabled": false,
+      "recoveryEnabled": false,
+      "recoverySettings": null
+    },
+    {
+      "projectId": "4918426002284882870",
+      "projectName": "Tim Ultrafibra Ativo",
       "modules": ["TelecomModule", "CrossSellModule"],
       "updateByTimeEnabled": false,
-      "recoveryEnabled": false,
-      "recoveryMinutes": 0
+      "intergrallEnabled": false,
+      "recoveryEnabled": true,
+      "recoverySettings": { "enabled": true, "minutes": 1, "ignoreChatbot": false, "chatbotMinutes": 1, "maxHours": 4 }
     }
   ],
   "total": 86,
@@ -58,8 +69,9 @@ access-token: <APIMANAGER_ACCESS_TOKEN>
 ```
 
 - O script pede páginas de 200 até ter lido `total` itens ou receber uma página vazia.
-- De cada item usa só `projectId`, `recoveryEnabled` e `recoveryMinutes`; os demais campos são ignorados. Sem abandono configurado, os dois últimos vêm `false` e `0`.
-- Se algum item vier sem `recoveryEnabled` ou `recoveryMinutes`, o script falha antes de qualquer `PUT`: sem esses campos não dá para saber o que seria sobrescrito.
+- De cada item usa só `projectId`, `recoveryEnabled` e `recoverySettings`; os demais campos são ignorados. Sem abandono configurado, vêm `false` e `null`.
+- `recoverySettings`, quando preenchido, traz `enabled`, `minutes`, `ignoreChatbot`, `chatbotMinutes` e `maxHours`.
+- Se algum item vier sem `recoveryEnabled` ou sem a chave `recoverySettings` (ela pode ser `null`, mas precisa existir), o script falha antes de qualquer `PUT`: sem esses campos não dá para saber o que seria sobrescrito.
 
 ### Escrita: ApiManager
 
@@ -93,7 +105,7 @@ Iguais aos do PRD 001, com as mesmas variáveis do `.env` da raiz:
 2. Ler a lista de configurações do ApiManager (todas as páginas). Falhar com mensagem clara se a chamada ou o formato for inválido.
 3. Para cada entrada do arquivo, na ordem do arquivo:
    - `projectId` sem configuração no ApiManager (comparação exata, com sufixo): **sem configuração**, sem chamada, mesmo com `-forcar`;
-   - abandono já configurado (`recoveryEnabled` `true` ou `recoveryMinutes` maior que `0`) e sem `-forcar`: **mantida**, sem chamada;
+   - abandono já configurado (`recoveryEnabled` `true` ou `recoverySettings` diferente de `null`) e sem `-forcar`: **mantida**, sem chamada;
    - caso contrário: chamar o `PUT` com o `body` da entrada.
 4. Respostas fora de `2xx` no `PUT` são registradas como falha (com status e corpo) e o script segue para a próxima.
 5. Ao final, exibir um resumo (atualizadas, mantidas, sem configuração, falhas). Sair com código diferente de zero se houver falha.
@@ -101,7 +113,7 @@ Iguais aos do PRD 001, com as mesmas variáveis do `.env` da raiz:
 7. Opção `-dry-run` mostra, para cada entrada, a decisão e o `body` que seria enviado, sem chamar o `PUT`.
 8. Opção `-ambiente teste|prod` (padrão `teste`); ver "Ambientes".
 9. Opção `-arquivo <caminho>` para usar outro arquivo. Padrão: `recovery-settings-projetos.json` (relativo à pasta de execução, que é a pasta do script no `go run .`).
-10. Opção `-forcar` grava o `body` também nas configurações que já têm abandono configurado, substituindo a configuração atual. Nas linhas de configurações que já tinham abandono (mantidas ou sobrescritas), o script mostra o valor atual (`enable` e `minutes`) ao lado do `body`.
+10. Opção `-forcar` grava o `body` também nas configurações que já têm abandono configurado, substituindo a configuração atual. Nas linhas de configurações que já tinham abandono (mantidas ou sobrescritas), o script mostra o valor atual ao lado do `body`: `recoverySettings` resumido (`enabled`, `minutes`, `ignoreChatbot`, `chatbotMinutes`, `maxHours`) ou, se vier `null` com `recoveryEnabled` `true`, só `recoveryEnabled=true`.
 
 ## Projeto de teste
 
@@ -141,5 +153,5 @@ Uma linha por entrada, com o `projectId` e o `body` resumido (`enable=true minut
 ## Fora do escopo
 
 - Criar configuração no ApiManager para projetos que não têm.
-- Desfazer a gravação: o script não guarda backup da configuração anterior (o valor atual, `enable` e `minutes`, só aparece na saída).
+- Desfazer a gravação: o script não guarda backup da configuração anterior (o valor atual só aparece na saída).
 - Consultar o Zoho CRM: o arquivo já traz os `projectId` completos.

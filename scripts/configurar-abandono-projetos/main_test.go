@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"strings"
 	"testing"
@@ -44,12 +45,39 @@ func TestLerEntradas(t *testing.T) {
 	}
 }
 
+func lerConfiguracao(t *testing.T, item string) configuracao {
+	t.Helper()
+	var c configuracao
+	if err := json.Unmarshal([]byte(item), &c); err != nil {
+		t.Fatal(err)
+	}
+	return c
+}
+
+func TestLerConfiguracao(t *testing.T) {
+	semAbandono := lerConfiguracao(t, `{"projectId":"1","projectName":"Vivo","recoveryEnabled":false,"recoverySettings":null}`)
+	if !semAbandono.temSettings || semAbandono.RecoverySettings != nil {
+		t.Errorf("recoverySettings null: temSettings=%v settings=%v", semAbandono.temSettings, semAbandono.RecoverySettings)
+	}
+	semChave := lerConfiguracao(t, `{"projectId":"1","recoveryEnabled":false,"recoveryMinutes":0}`)
+	if semChave.temSettings {
+		t.Error("sem a chave recoverySettings: temSettings deveria ser false")
+	}
+	ativo := lerConfiguracao(t, `{"projectId":"1","recoveryEnabled":true,
+		"recoverySettings":{"enabled":true,"minutes":1,"ignoreChatbot":false,"chatbotMinutes":1,"maxHours":4}}`)
+	esperado := "enabled=true minutes=1 ignoreChatbot=false chatbotMinutes=1 maxHours=4"
+	if r := ativo.resumoAtual(); r != esperado {
+		t.Errorf("resumoAtual = %q, esperado %q", r, esperado)
+	}
+}
+
 func TestDecidir(t *testing.T) {
-	sim, nao := true, false
-	zero, vinte := 0, 20
-	semAbandono := configuracao{ProjectID: "1", RecoveryEnabled: &nao, RecoveryMinutes: &zero}
-	habilitado := configuracao{ProjectID: "1", RecoveryEnabled: &sim, RecoveryMinutes: &vinte}
-	desabilitadoComMinutos := configuracao{ProjectID: "1", RecoveryEnabled: &nao, RecoveryMinutes: &vinte}
+	semAbandono := lerConfiguracao(t, `{"projectId":"1","recoveryEnabled":false,"recoverySettings":null}`)
+	ativo := lerConfiguracao(t, `{"projectId":"1","recoveryEnabled":true,
+		"recoverySettings":{"enabled":true,"minutes":1,"ignoreChatbot":false,"chatbotMinutes":1,"maxHours":4}}`)
+	desativadoConfigurado := lerConfiguracao(t, `{"projectId":"1","recoveryEnabled":false,
+		"recoverySettings":{"enabled":false,"minutes":20,"ignoreChatbot":false,"chatbotMinutes":null,"maxHours":24}}`)
+	ativoSemSettings := lerConfiguracao(t, `{"projectId":"1","recoveryEnabled":true,"recoverySettings":null}`)
 
 	casos := []struct {
 		nome     string
@@ -61,9 +89,10 @@ func TestDecidir(t *testing.T) {
 		{"não existe", configuracao{}, false, false, semConfiguracao},
 		{"não existe, com -forcar", configuracao{}, false, true, semConfiguracao},
 		{"sem abandono", semAbandono, true, false, atualizar},
-		{"habilitado", habilitado, true, false, mantida},
-		{"habilitado, com -forcar", habilitado, true, true, atualizar},
-		{"desabilitado com minutos", desabilitadoComMinutos, true, false, mantida},
+		{"ativo", ativo, true, false, mantida},
+		{"ativo, com -forcar", ativo, true, true, atualizar},
+		{"desativado mas configurado", desativadoConfigurado, true, false, mantida},
+		{"ativo sem recoverySettings", ativoSemSettings, true, false, mantida},
 	}
 	for _, c := range casos {
 		if d := decidir(c.c, c.existe, c.forcar); d != c.esperado {

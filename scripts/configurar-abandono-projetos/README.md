@@ -28,7 +28,8 @@ PRD: [prds/002-configurar-abandono-projetos.md](../../prds/002-configurar-abando
 ## Regra
 
 - `projectId` que não existe no ApiManager não é alterado, nem com `-forcar`.
-- Configuração que já tem abandono (`recoveryEnabled` `true` ou `recoveryMinutes` maior que `0`) é mantida, a menos que se use `-forcar`.
+- Configuração que já tem abandono (`recoveryEnabled` `true` ou `recoverySettings` diferente de `null` na listagem) é mantida, a menos que se use `-forcar`.
+- Se a listagem vier sem `recoveryEnabled` ou sem a chave `recoverySettings`, o script falha antes de gravar.
 - As demais recebem o `body` do arquivo.
 
 ## Variáveis de ambiente
@@ -91,7 +92,7 @@ O ambiente local usa o certificado de desenvolvimento do .NET, que precisa estar
 
 ## Saída
 
-Uma linha por entrada, com o `body` resumido e, quando já havia abandono configurado, o valor atual (`atual: enable=... minutes=...`). Resumo no final:
+Uma linha por entrada, com o `body` resumido e, quando já havia abandono configurado, o valor atual (`atual: enabled=... minutes=... ignoreChatbot=... chatbotMinutes=... maxHours=...`). Resumo no final:
 
 - `[ok]`: configuração gravada (com `-dry-run`, `[atualizaria]`);
 - `[mantida]`: já tinha abandono configurado e `-forcar` não foi usado;

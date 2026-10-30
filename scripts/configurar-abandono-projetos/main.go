@@ -44,9 +44,33 @@ type recovery struct {
 }
 
 type configuracao struct {
-	ProjectID       string `json:"projectId"`
-	RecoveryEnabled *bool  `json:"recoveryEnabled"`
-	RecoveryMinutes *int   `json:"recoveryMinutes"`
+	ProjectID        string         `json:"projectId"`
+	RecoveryEnabled  *bool          `json:"recoveryEnabled"`
+	RecoverySettings *recoveryAtual `json:"recoverySettings"`
+	// temSettings indica se a chave recoverySettings veio na resposta (pode ser null).
+	temSettings bool
+}
+
+// recoveryAtual é o recoverySettings da listagem; usa "enabled", não "enable".
+type recoveryAtual struct {
+	Enabled        *bool `json:"enabled"`
+	Minutes        *int  `json:"minutes"`
+	IgnoreChatbot  *bool `json:"ignoreChatbot"`
+	ChatbotMinutes *int  `json:"chatbotMinutes"`
+	MaxHours       *int  `json:"maxHours"`
+}
+
+func (c *configuracao) UnmarshalJSON(dados []byte) error {
+	type semMetodo configuracao
+	if err := json.Unmarshal(dados, (*semMetodo)(c)); err != nil {
+		return err
+	}
+	var campos map[string]json.RawMessage
+	if err := json.Unmarshal(dados, &campos); err != nil {
+		return err
+	}
+	_, c.temSettings = campos["recoverySettings"]
+	return nil
 }
 
 type decisao int
@@ -123,7 +147,7 @@ func run(id string, dryRun bool, ambiente string, forcar bool, arquivo string) e
 		c, existe := porID[e.ProjectID]
 		linha := e.ProjectID + " " + e.recovery.resumo()
 		if existe && configurado(c) {
-			linha += fmt.Sprintf(" (atual: enable=%t minutes=%d)", *c.RecoveryEnabled, *c.RecoveryMinutes)
+			linha += " (atual: " + c.resumoAtual() + ")"
 		}
 
 		switch decidir(c, existe, forcar) {
@@ -232,23 +256,37 @@ func decidir(c configuracao, existe, forcar bool) decisao {
 }
 
 // configurado indica se a configuração já tem abandono configurado. Sem
-// abandono, o ApiManager devolve recoveryEnabled=false e recoveryMinutes=0.
+// abandono, o ApiManager devolve recoveryEnabled=false e recoverySettings=null.
 func configurado(c configuracao) bool {
-	return *c.RecoveryEnabled || *c.RecoveryMinutes > 0
+	return *c.RecoveryEnabled || c.RecoverySettings != nil
 }
 
 func (r recovery) resumo() string {
-	chatbot := "-"
-	if r.ChatbotMinutes != nil {
-		chatbot = fmt.Sprint(*r.ChatbotMinutes)
-	}
 	return fmt.Sprintf("enable=%t minutes=%d ignoreChatbot=%t chatbotMinutes=%s maxHours=%d",
-		*r.Enable, *r.Minutes, *r.IgnoreChatbot, chatbot, *r.MaxHours)
+		*r.Enable, *r.Minutes, *r.IgnoreChatbot, valor(r.ChatbotMinutes), *r.MaxHours)
+}
+
+// resumoAtual descreve o abandono atual da configuração, para a saída.
+func (c configuracao) resumoAtual() string {
+	s := c.RecoverySettings
+	if s == nil {
+		return fmt.Sprintf("recoveryEnabled=%t", *c.RecoveryEnabled)
+	}
+	return fmt.Sprintf("enabled=%s minutes=%s ignoreChatbot=%s chatbotMinutes=%s maxHours=%s",
+		valor(s.Enabled), valor(s.Minutes), valor(s.IgnoreChatbot), valor(s.ChatbotMinutes), valor(s.MaxHours))
+}
+
+// valor formata um campo opcional, com "-" quando ausente ou null.
+func valor[T any](v *T) string {
+	if v == nil {
+		return "-"
+	}
+	return fmt.Sprint(*v)
 }
 
 // listarConfiguracoes lê todas as páginas de GET /projectsetting. Falha se
-// algum item vier sem recoveryEnabled ou recoveryMinutes, porque sem eles não
-// dá para saber o que seria sobrescrito.
+// algum item vier sem recoveryEnabled ou sem a chave recoverySettings, porque
+// sem eles não dá para saber o que seria sobrescrito.
 func listarConfiguracoes(baseURL, token string) ([]configuracao, error) {
 	var todas []configuracao
 	for pagina := 1; ; pagina++ {
@@ -281,8 +319,8 @@ func listarConfiguracoes(baseURL, token string) ([]configuracao, error) {
 			return nil, fmt.Errorf("página %d: resposta inválida: %w", pagina, err)
 		}
 		for _, c := range saida.Items {
-			if c.RecoveryEnabled == nil || c.RecoveryMinutes == nil {
-				return nil, fmt.Errorf("página %d: configuração %q sem recoveryEnabled ou recoveryMinutes", pagina, c.ProjectID)
+			if c.RecoveryEnabled == nil || !c.temSettings {
+				return nil, fmt.Errorf("página %d: configuração %q sem recoveryEnabled ou recoverySettings", pagina, c.ProjectID)
 			}
 		}
 		todas = append(todas, saida.Items...)
